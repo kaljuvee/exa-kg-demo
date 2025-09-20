@@ -128,8 +128,10 @@ def create_network_visualization(graph_data):
     # Create the figure
     fig = go.Figure(data=[edge_trace] + node_traces,
                     layout=go.Layout(
-                        title="Companies House Knowledge Graph",
-                        titlefont_size=16,
+                        title=dict(
+                            text="Companies House Knowledge Graph",
+                            font=dict(size=16)
+                        ),
                         showlegend=True,
                         hovermode='closest',
                         margin=dict(b=20,l=5,r=5,t=40),
