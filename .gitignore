@@ -45,7 +45,7 @@ coverage.xml
 .pytest_cache/
 
 # Streamlit
-.streamlit/
+# .streamlit/
 
 # Jupyter Notebook
 .ipynb_checkpoints
