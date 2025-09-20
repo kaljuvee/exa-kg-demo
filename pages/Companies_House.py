@@ -278,13 +278,13 @@ def main():
     if api_key:
         st.session_state.ch_api_key = api_key
     
-    # Company search input
-    company_name = st.sidebar.text_input(
-        "Company Name",
-        placeholder="e.g., Tesco PLC, BP PLC, Vodafone"
+    # Input for company name or number
+    company_input = st.sidebar.text_input(
+        "Company Name or Number",
+        placeholder="e.g., Tesco PLC, BP PLC, Vodafone, or 71431144",
+        help="Enter a UK company name to search for, or a company number for direct access (useful for sandbox testing)"
     )
     
-    # Configuration options
     max_companies = st.sidebar.slider(
         "Maximum Companies",
         min_value=1,
@@ -297,16 +297,16 @@ def main():
     if st.sidebar.button("🔍 Build Companies House Graph", type="primary"):
         if not api_key:
             st.sidebar.error("Please enter your Companies House API key")
-        elif not company_name:
+        elif not company_input:
             st.sidebar.error("Please enter a company name")
         else:
             with st.spinner("Building knowledge graph from Companies House data..."):
                 try:
                     # Initialize API client
-                    ch_api = CompaniesHouseAPI(api_key)
+                    ch_api = CompaniesHouseAPI(api_key, use_sandbox=False)
                     
                     # Build the network
-                    graph_data = ch_api.get_company_network(company_name, max_companies)
+                    graph_data = ch_api.get_company_network(company_input, max_companies)
                     
                     if graph_data and graph_data['nodes']:
                         st.session_state.ch_graph_data = graph_data

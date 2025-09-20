@@ -8,10 +8,15 @@ to retrieve company information, directors, and persons with significant control
 import requests
 import json
 import time
+import os
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from datetime import datetime
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -57,15 +62,21 @@ class CompaniesHouseAPI:
     Companies House API client for retrieving UK company information
     """
     
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, use_sandbox: bool = False):
         """
         Initialize the Companies House API client
         
         Args:
             api_key (str): Your Companies House API key
+            use_sandbox (bool): Whether to use sandbox environment (default: True)
         """
         self.api_key = api_key
-        self.base_url = "https://api.company-information.service.gov.uk"
+        self.use_sandbox = use_sandbox
+        
+        if use_sandbox:
+            self.base_url = "https://api-sandbox.company-information.service.gov.uk"
+        else:
+            self.base_url = "https://api.company-information.service.gov.uk"
         self.session = requests.Session()
         self.session.auth = (api_key, '')  # Basic auth with API key as username
         self.session.headers.update({
